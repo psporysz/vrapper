@@ -897,7 +897,7 @@ public class CommandLineParser extends AbstractCommandParser {
             }
             editorAdaptor.setNativeSelection(selectionRange);
             action.evaluate(editorAdaptor, tokens);
-            editorAdaptor.setSelection(null);
+//            editorAdaptor.setSelection(null);
         }
     
     }

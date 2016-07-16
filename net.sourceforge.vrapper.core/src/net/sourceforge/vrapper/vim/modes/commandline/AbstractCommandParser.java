@@ -20,6 +20,7 @@ import net.sourceforge.vrapper.vim.EditorAdaptor;
 import net.sourceforge.vrapper.vim.Options;
 import net.sourceforge.vrapper.vim.commands.Command;
 import net.sourceforge.vrapper.vim.commands.LeaveVisualModeCommand;
+import net.sourceforge.vrapper.vim.modes.AbstractVisualMode;
 import net.sourceforge.vrapper.vim.modes.ExecuteCommandHint;
 import net.sourceforge.vrapper.vim.modes.NormalMode;
 import net.sourceforge.vrapper.vim.register.Register;
@@ -299,16 +300,17 @@ public abstract class AbstractCommandParser {
         if (parsedCommand == null && isFromVisual) {
             // Fix caret position, clear selection.
             editor.changeModeSafely(NormalMode.NAME,
-                    new ExecuteCommandHint.OnEnter(LeaveVisualModeCommand.INSTANCE));
+                    new ExecuteCommandHint.OnEnter(LeaveVisualModeCommand.INSTANCE), AbstractVisualMode.KEEP_SELECTION_HINT);
         } else if (parsedCommand == null) {
             editor.changeModeSafely(NormalMode.NAME);
         } else {
+        	isFromVisual = false;
             editor.changeModeSafely(
                     // Return to the last mode in the case of a temporary mode switch.
                     isFromVisual ? NormalMode.NAME : editor.getLastModeName(),
-                    new ExecuteCommandHint.OnEnter(parsedCommand));
+                    new ExecuteCommandHint.OnEnter(parsedCommand), AbstractVisualMode.KEEP_SELECTION_HINT);
             // Only do this AFTER changing the mode, Eclipse commands might still use the selection!
-            editor.setSelection(null);
+//            editor.setSelection(null);
         }
     }
 
